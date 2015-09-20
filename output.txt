@@ -1,0 +1,18 @@
+   Compiling compress v0.1.0 (file:///C:/Users/mate/Scratch/Rust/compress)
+     Running target\debug\compress-3a137050136a5d02.exe
+
+running 5 tests
+test tree::hufftests::smoke_test2 ... ok
+test tree::hufftests::smoke_code_2_elems ... ok
+test algorithm::hufftests::smoke_test_1 ... ok
+test tree::hufftests::smoke_test1 ... ok
+test tree::hufftests::smoke_test3 ... ok
+
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured
+
+   Doc-tests compress
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured
+
