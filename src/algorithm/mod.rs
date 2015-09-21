@@ -9,8 +9,6 @@ pub fn compress_data(data : &Vec<u8>) -> (Vec<u8>, HuffmanTree) {
 		all_bits.extend(&walk_to_byte(&byte, &tree));
 	}
 
-	println!("Bits length is {}", all_bits.len());
-
 	let mut all_bytes : Vec<u8> = Vec::new();
 
 	let mut byte : u8 = 0;
@@ -117,7 +115,7 @@ mod hufftests {
 	use super::compress_data;
 	use super::decompress_data;
 	use super::walk_to_byte;
-	use tree::{build_tree};
+	use tree::{build_tree, HuffmanTree};
 
 	#[test]
 	fn simple_tree_test_1 () {
@@ -145,12 +143,67 @@ mod hufftests {
 	}
 
 	#[test]
-	fn simple_compress_test_1() {
-		let mut original_data = vec![0];
+	fn simple_tree_walk() {
+		let first_left_child = HuffmanTree {
+			zero : None,
+			one : None,
+			count : 1,
+			elem : vec![0]
+		};
+
+		let bottom_left_child = HuffmanTree {
+			zero : None,
+			one : None,
+			count : 1,
+			elem : vec![1]
+		};
+
+		let bottom_right_child = HuffmanTree {
+			zero : None,
+			one : None,
+			count : 1,
+			elem : vec![2]
+		};
+
+		let internal_node = HuffmanTree {
+			zero : Some(Box::new(bottom_left_child)),
+			one : Some(Box::new(bottom_right_child)),
+			count : 2,
+			elem : vec![1,2]
+		};
+
+		let tree = HuffmanTree {
+			zero : Some(Box::new(first_left_child)),
+			one : Some(Box::new(internal_node)),
+			count : 3,
+			elem : vec![0,1,2]
+		};
+
+		assert_eq!(vec![false], walk_to_byte(&0, &tree));
+		assert_eq!(vec![false, true], walk_to_byte(&1, &tree));
+		assert_eq!(vec![true, true], walk_to_byte(&2, &tree));
+	}
+
+	#[test]
+	fn simple_tree_1() {
+		let mut original_data = vec![0,0,0,0,0,0,0,0,0,1];
 		let mut compressed = compress_data(&original_data);
 
-		assert_eq!(1, compressed.0.len());
-		assert_eq!(vec![0], compressed);
+		assert_eq!(vec![1,0], compressed.1.elem);
+
+		assert_eq!(Some(Box::new(HuffmanTree{
+			zero : None,
+			one : None,
+			count : 9,
+			elem : vec![0]
+		})), compressed.1.one);
+
+		assert_eq!(Some(Box::new(HuffmanTree{
+			zero : None,
+			one : None,
+			count : 1,
+			elem : vec![1]
+		})), compressed.1.zero);
 	}
 
 	#[test]
