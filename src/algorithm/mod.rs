@@ -1,34 +1,39 @@
 use tree::{build_tree, HuffmanTree};
 
 pub fn compress_data(data : &Vec<u8>) -> (Vec<u8>, HuffmanTree) {
-	let tree = build_tree(data);
+	println!("Compressing data: {:?}", data);
 
+	let tree = build_tree(data);
 	let mut all_bits : Vec<bool> = Vec :: new();
 
 	for byte in data {
+		println!("Extending bytes by walking to it");
 		all_bits.extend(&walk_to_byte(&byte, &tree));
 	}
 
 	let mut all_bytes : Vec<u8> = Vec::new();
-
 	let mut byte : u8 = 0;
 	let mut count = 0;
 
 	for bit in all_bits {
-		if count == 8 {
-			all_bytes.push(byte);
-			byte = 0;
-			count = 0;
-		}
+		println!("This bit: {}", bit);
+
 		if bit {
 			byte = (byte << 1) + 1;
 		}else{
 			byte = (byte << 1);
 		}
+		
 		count += 1;
+
+		if count == 8 {
+			all_bytes.push(byte);
+			byte = 0;
+			count = 0;
+		}
 	}
 
-	if (count > 0) {
+	if (count != 0) {
 		all_bytes.push(byte << (8 - count)) ;
 	}
 
@@ -45,6 +50,8 @@ pub fn decompress_data(data : & Vec<u8>, tree : &HuffmanTree) -> Vec<u8>{
 		}
 	}
 
+	println!("ALL BITS: {}", all_bits.len());
+
 	while all_bits.len() > 0 { 
 		result.push(decompress_codeword(&mut all_bits, tree));
 	}
@@ -53,11 +60,10 @@ pub fn decompress_data(data : & Vec<u8>, tree : &HuffmanTree) -> Vec<u8>{
 }
 
 fn make_bits(byte : u8) -> Vec<bool> {
-	let bits = vec![byte & 1, (byte >> 1) & 1,(byte >> 2) & 1, (byte >> 3) & 1, (byte >> 4) & 1, (byte >> 5) & 1,(byte >> 6 & 1),(byte >> 7) & 1];
 	let mut bool_bits = Vec::new();
 
-	for bit in bits {
-		bool_bits.push((bit == 1));
+	for i in 0..8 {
+		bool_bits.push((byte >> (7 - i)) & 1 == 1);
 	}
 
 	return bool_bits;
@@ -83,39 +89,65 @@ fn decompress_codeword(bits : &mut Vec<bool>, tree : &HuffmanTree) -> u8 {
 }
 
 fn walk_to_byte(byte : &u8, tree : &HuffmanTree) -> Vec<bool> {
+	let result = walk_to_byte_internal(byte, tree);
+	if result.len() == 0 {
+		panic!("No nodes in tree");
+	}
+	return result;
+}
+
+fn walk_to_byte_internal(byte : &u8, tree : &HuffmanTree) -> Vec<bool> {
 	let mut bits;
 
 	match (*tree).zero {
 		Some(ref subtree) => {
 			if (subtree).elem.contains(byte) {
-				bits = walk_to_byte(byte, &*subtree);
+				bits = walk_to_byte_internal(byte, &*subtree);
 				bits.push(false);
+				println!("The bits are: {}", bits.len());
 				return bits;
 			}
 		},
 		_ => {}
 	};
-
 	match (*tree).one {
 		Some(ref subtree) => {
 			if (subtree).elem.contains(byte) {
-				bits = walk_to_byte(byte, &*subtree);
+				bits = walk_to_byte_internal(byte, &*subtree);
 				bits.push(true);
+				println!("The bits are: {}", bits.len());
 				return bits;
 			} 
 		},
 		_ => {}
 	};
-
 	bits = Vec::new();
 	return bits;
 }
 
 mod hufftests {
-	use super::compress_data;
-	use super::decompress_data;
-	use super::walk_to_byte;
+	use super::{compress_data, decompress_data, walk_to_byte, make_bits};
 	use tree::{build_tree, HuffmanTree};
+
+	#[test]
+	fn test_make_bits_0() {
+		assert_eq!(vec![false,false,false,false,false,false,false,false], make_bits(0));
+	}
+
+	#[test]
+	fn test_make_bits_1() {
+		assert_eq!(vec![false,false,false,false,false,false,false,true], make_bits(1));
+	}
+
+	#[test]
+	fn test_make_bits_32() {
+		assert_eq!(vec![false,false,true,false,false,false,false,false], make_bits(32));
+	}
+
+	#[test]
+	fn test_make_bits_70() {
+		assert_eq!(vec![false,true,false,false,false,true,false,false], make_bits(68));
+	}
 
 	#[test]
 	fn simple_tree_test_1 () {
@@ -143,7 +175,7 @@ mod hufftests {
 	}
 
 	#[test]
-	fn simple_tree_walk() {
+	fn simple_tree_walk_1() {
 		let first_left_child = HuffmanTree {
 			zero : None,
 			one : None,
@@ -204,6 +236,15 @@ mod hufftests {
 			count : 1,
 			elem : vec![1]
 		})), compressed.1.zero);
+	}
+
+	#[test]
+	fn simple_compress_test_1() {
+		let mut original_data = vec![0];
+		let mut compressed = compress_data(&original_data);
+
+		assert_eq!(1, compressed.0.len());
+		assert_eq!(vec![1], compressed.0);	
 	}
 
 	#[test]

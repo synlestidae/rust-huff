@@ -35,6 +35,20 @@ impl Ord for HuffmanTree {
 }
 
 pub fn build_tree(data : &Vec<u8>) -> HuffmanTree {
+	if data.len() == 1 {
+		return HuffmanTree {
+			one : None,
+			zero : Some(Box::new(HuffmanTree{
+				one : None,
+				zero : None,
+				count : 1,
+				elem : vec![data[0]]
+			})),
+			count : 1,
+			elem : vec![data[0]]
+		}
+	}
+
 	let mut all_nodes : Vec<_> = (0..255).map(|n| {
 		let mut elems = Vec::new();
 		elems.push(n);
@@ -103,7 +117,12 @@ mod hufftests {
 		bitty.push(0);
 
 		let tree = HuffmanTree {
-			zero : None,
+			zero : Some(Box::new(HuffmanTree {
+				zero : None,
+				one : None,
+				count : 1,
+				elem : bitty.clone()
+			})),
 			one : None,
 			count : 1,
 			elem : bitty
@@ -122,11 +141,17 @@ mod hufftests {
 		bitty.push(1);
 
 		let tree = HuffmanTree {
-			zero : None,
+			zero : Some(Box::new(HuffmanTree {
+				zero : None,
+				one : None,
+				count : 1,
+				elem : bitty.clone()
+			})),
 			one : None,
 			count : 1,
 			elem : bitty
 		};
+
 		assert_eq!(tree, build_tree(&vec2));
 	}
 
