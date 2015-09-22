@@ -1,13 +1,10 @@
 use tree::{build_tree, HuffmanTree};
 
 pub fn compress_data(data : &Vec<u8>) -> (Vec<u8>, HuffmanTree) {
-	println!("Compressing data: {:?}", data);
-
 	let tree = build_tree(data);
 	let mut all_bits : Vec<bool> = Vec :: new();
 
 	for byte in data {
-		println!("Extending bytes by walking to it");
 		all_bits.extend(&walk_to_byte(&byte, &tree));
 	}
 
@@ -16,8 +13,6 @@ pub fn compress_data(data : &Vec<u8>) -> (Vec<u8>, HuffmanTree) {
 	let mut count = 0;
 
 	for bit in all_bits {
-		println!("This bit: {}", bit);
-
 		if bit {
 			byte = (byte << 1) + 1;
 		}else{
@@ -40,7 +35,7 @@ pub fn compress_data(data : &Vec<u8>) -> (Vec<u8>, HuffmanTree) {
 	return (all_bytes, tree);
 }
 
-pub fn decompress_data(data : & Vec<u8>, tree : &HuffmanTree) -> Vec<u8>{
+pub fn decompress_data(data : & Vec<u8>, tree : &HuffmanTree, original_length : usize) -> Vec<u8>{
 	let mut result = Vec::new();
 	let mut all_bits : Vec<bool> = Vec::new();
 
@@ -50,10 +45,12 @@ pub fn decompress_data(data : & Vec<u8>, tree : &HuffmanTree) -> Vec<u8>{
 		}
 	}
 
-	println!("ALL BITS: {}", all_bits.len());
+	let mut bytes : usize = 0; 
 
-	while all_bits.len() > 0 { 
+	while bytes < original_length && all_bits.len() > 0 { 
+		println!("Running a loopy: {}", all_bits.len());
 		result.push(decompress_codeword(&mut all_bits, tree));
+		bytes += 1;
 	}
 
 	return result;
@@ -70,29 +67,36 @@ fn make_bits(byte : u8) -> Vec<bool> {
 }
 
 fn decompress_codeword(bits : &mut Vec<bool>, tree : &HuffmanTree) -> u8 {
-	if bits.len() > 0 {
-		let bit = bits.remove(0);
-		if bit {
-			match tree.one {
-				Some(ref subtree) => return decompress_codeword(bits, &*subtree),
-				_ => return tree.elem[0]
-			}
-		}else{
-			match tree.zero {
-				Some(ref subtree) => return decompress_codeword(bits, &*subtree),
-				_ => return tree.elem[0]
-			}
+	let mut treeDown : &HuffmanTree;
+
+	let bit = bits.remove(0);
+
+	match (bit, &tree.zero) {
+		(false, &Some(ref leftTree)) => treeDown = &*leftTree,
+		_ => {
+			match (bit, &tree.one) {
+				(true, &Some(ref rightTree)) => treeDown = &*rightTree,
+				_ => panic!("Cannot decompressed codeword")
+			} 
 		}
 	}
 
-	panic!("Cannot decompress when no input given");
+	if (!treeDown.zero.is_some() && !treeDown.one.is_some()) {
+		return treeDown.elem[0];
+	}else {
+		return decompress_codeword(bits, tree);
+	}
+
 }
 
 fn walk_to_byte(byte : &u8, tree : &HuffmanTree) -> Vec<bool> {
 	let result = walk_to_byte_internal(byte, tree);
+
 	if result.len() == 0 {
+		println!("The tree: {:?}", tree);
 		panic!("No nodes in tree");
 	}
+
 	return result;
 }
 
@@ -104,7 +108,6 @@ fn walk_to_byte_internal(byte : &u8, tree : &HuffmanTree) -> Vec<bool> {
 			if (subtree).elem.contains(byte) {
 				bits = walk_to_byte_internal(byte, &*subtree);
 				bits.push(false);
-				println!("The bits are: {}", bits.len());
 				return bits;
 			}
 		},
@@ -115,12 +118,12 @@ fn walk_to_byte_internal(byte : &u8, tree : &HuffmanTree) -> Vec<bool> {
 			if (subtree).elem.contains(byte) {
 				bits = walk_to_byte_internal(byte, &*subtree);
 				bits.push(true);
-				println!("The bits are: {}", bits.len());
 				return bits;
 			} 
 		},
 		_ => {}
 	};
+
 	bits = Vec::new();
 	return bits;
 }
@@ -244,18 +247,63 @@ mod hufftests {
 		let mut compressed = compress_data(&original_data);
 
 		assert_eq!(1, compressed.0.len());
-		assert_eq!(vec![1], compressed.0);	
+		assert_eq!(vec![0], compressed.0);	
 	}
 
 	#[test]
 	fn simple_compress_decompress_test_1() {
-		let mut original_data = vec![0];
+		let mut original_data = vec![1];
 		let mut compressed = compress_data(&original_data);
 
-		let decompressed = decompress_data(&compressed.0, &compressed.1);
+		let decompressed = decompress_data(&compressed.0, &compressed.1, original_data.len());
 
 		assert_eq!(1, compressed.0.len());
 		assert_eq!(original_data, decompressed); 
 		assert_eq!(1, decompressed.len());
+	}
+
+	#[test]
+	fn simple_compress_decompress_test_2() {
+		let mut original_data = vec![0, 1];
+		let mut compressed = compress_data(&original_data);
+
+		let decompressed = decompress_data(&compressed.0, &compressed.1, original_data.len());
+
+		assert_eq!(original_data, decompressed); 
+		assert_eq!(original_data.len(), decompressed.len());
+	}
+
+
+	#[test]
+	fn simple_compress_decompress_test_3() {
+		let mut original_data = vec![1,1,0];
+		let mut compressed = compress_data(&original_data);
+
+		let decompressed = decompress_data(&compressed.0, &compressed.1, original_data.len());
+
+		assert_eq!(original_data, decompressed); 
+		assert_eq!(original_data.len(), decompressed.len());
+	}
+
+	#[test]
+	fn simple_compress_decompress_test_4() {
+		let mut original_data = vec![1,1,0,1,0];
+		let mut compressed = compress_data(&original_data);
+
+		let decompressed = decompress_data(&compressed.0, &compressed.1, original_data.len());
+
+		assert_eq!(original_data, decompressed); 
+		assert_eq!(original_data.len(), decompressed.len());
+	}
+
+	#[test]
+	fn simple_compress_decompress_test_5() {
+		let mut original_data = vec![1,1,2,2,2,2,0,1,0];
+		let mut compressed = compress_data(&original_data);
+
+		let decompressed = decompress_data(&compressed.0, &compressed.1, original_data.len());
+
+		assert_eq!(original_data, decompressed); 
+		assert_eq!(original_data.len(), decompressed.len());
 	}
 }
