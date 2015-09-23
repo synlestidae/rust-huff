@@ -1,0 +1,33 @@
+   Compiling compress v0.1.0 (file:///C:/Users/mate/Scratch/Rust/compress)
+     Running target\debug\compress-3a137050136a5d02.exe
+
+running 20 tests
+test algorithm::hufftests::simple_compress_decompress_test_1 ... ok
+test algorithm::hufftests::simple_compress_decompress_test_2 ... ok
+test algorithm::hufftests::simple_compress_decompress_test_4 ... ok
+test algorithm::hufftests::simple_compress_decompress_test_5 ... ok
+test algorithm::hufftests::simple_compress_decompress_test_3 ... ok
+test algorithm::hufftests::simple_compress_test_1 ... ok
+test algorithm::hufftests::simple_tree_1 ... ok
+test algorithm::hufftests::simple_tree_test_1 ... ok
+test algorithm::hufftests::simple_tree_test_2 ... ok
+test algorithm::hufftests::test_make_bits_1 ... ok
+test algorithm::hufftests::simple_tree_walk_1 ... ok
+test algorithm::hufftests::test_make_bits_0 ... ok
+test algorithm::hufftests::test_make_bits_32 ... ok
+test algorithm::hufftests::test_make_bits_70 ... ok
+test tree::hufftests::smoke_test1 ... ok
+test tree::hufftests::smoke_test2 ... ok
+test tree::hufftests::smoke_code_2_elems ... ok
+test tree::hufftests::smoke_test3 ... ok
+test tree::hufftests::test_tree_has_elems_1 ... ok
+test tree::hufftests::test_tree_has_elems_2 ... ok
+
+test result: ok. 20 passed; 0 failed; 0 ignored; 0 measured
+
+   Doc-tests compress
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured
+

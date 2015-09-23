@@ -39,6 +39,8 @@ pub fn decompress_data(data : & Vec<u8>, tree : &HuffmanTree, original_length : 
 	let mut result = Vec::new();
 	let mut all_bits : Vec<bool> = Vec::new();
 
+	println!("Tree: {:?}", tree);
+
 	for byte in data {
 		for bit in make_bits(byte.clone()) {
 			all_bits.push(bit);
@@ -48,8 +50,9 @@ pub fn decompress_data(data : & Vec<u8>, tree : &HuffmanTree, original_length : 
 	let mut bytes : usize = 0; 
 
 	while bytes < original_length && all_bits.len() > 0 { 
-		println!("Running a loopy: {}", all_bits.len());
-		result.push(decompress_codeword(&mut all_bits, tree));
+		println!("Decompressing: {:?}", all_bits);
+		let codeword = decompress_codeword(&mut all_bits, tree);
+		result.push(codeword);
 		bytes += 1;
 	}
 
@@ -71,37 +74,44 @@ fn decompress_codeword(bits : &mut Vec<bool>, tree : &HuffmanTree) -> u8 {
 
 	let bit = bits.remove(0);
 
+	println!("Bit: {}", bit);
+
 	match (bit, &tree.zero) {
-		(false, &Some(ref leftTree)) => treeDown = &*leftTree,
+		(false, &Some(ref leftTree)) => { treeDown = &*leftTree; },
 		_ => {
 			match (bit, &tree.one) {
-				(true, &Some(ref rightTree)) => treeDown = &*rightTree,
+				(true, &Some(ref rightTree)) => { treeDown = &*rightTree; },
 				_ => panic!("Cannot decompressed codeword")
 			} 
 		}
 	}
 
-	if (!treeDown.zero.is_some() && !treeDown.one.is_some()) {
+	if !treeDown.zero.is_some() && !treeDown.one.is_some() {
+		println!("Byte: {:?}", treeDown.elem);
 		return treeDown.elem[0];
 	}else {
-		return decompress_codeword(bits, tree);
+		return decompress_codeword(bits, treeDown);
 	}
 
 }
 
 fn walk_to_byte(byte : &u8, tree : &HuffmanTree) -> Vec<bool> {
-	let result = walk_to_byte_internal(byte, tree);
+	let mut result = walk_to_byte_internal(byte, tree);
 
 	if result.len() == 0 {
-		println!("The tree: {:?}", tree);
 		panic!("No nodes in tree");
 	}
+
+	result.reverse();
+
+	println!("Encode {} as {:?}", byte, result);
+
 
 	return result;
 }
 
 fn walk_to_byte_internal(byte : &u8, tree : &HuffmanTree) -> Vec<bool> {
-	let mut bits;
+	let mut bits : Vec<bool>;
 
 	match (*tree).zero {
 		Some(ref subtree) => {
@@ -215,7 +225,7 @@ mod hufftests {
 		};
 
 		assert_eq!(vec![false], walk_to_byte(&0, &tree));
-		assert_eq!(vec![false, true], walk_to_byte(&1, &tree));
+		assert_eq!(vec![true, false], walk_to_byte(&1, &tree));
 		assert_eq!(vec![true, true], walk_to_byte(&2, &tree));
 	}
 
@@ -298,7 +308,18 @@ mod hufftests {
 
 	#[test]
 	fn simple_compress_decompress_test_5() {
-		let mut original_data = vec![1,1,2,2,2,2,0,1,0];
+		let mut original_data = vec![0,2,1];
+		let mut compressed = compress_data(&original_data);
+
+		let decompressed = decompress_data(&compressed.0, &compressed.1, original_data.len());
+
+		assert_eq!(original_data, decompressed); 
+		assert_eq!(original_data.len(), decompressed.len());
+	}
+
+	#[test]
+	fn simple_compress_decompress_test_6() {
+		let mut original_data = vec![0,2,1,5,10,20,20,20,20,1,1,1,34,34,34,7,1];
 		let mut compressed = compress_data(&original_data);
 
 		let decompressed = decompress_data(&compressed.0, &compressed.1, original_data.len());

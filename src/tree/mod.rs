@@ -192,4 +192,21 @@ mod hufftests {
 
 		assert_eq!(tree, build_tree(&stream));
 	}
+
+	#[test]
+	fn test_tree_has_elems_1() {
+		let mut stream : Vec<u8>= vec![1,2,3,4,5,6,7,8,9,10];
+
+		assert_eq!(10, build_tree(&stream).elem.len());
+	}
+
+	#[test]
+	fn test_tree_has_elems_2() {
+		let mut stream : Vec<u8>= vec![1,1,2,2,2,2,0,1,0];
+		let tree = build_tree(&stream);
+
+		assert_eq!(3, tree.elem.len());
+
+		println!("Tree: {:?}", tree);
+	}
 }
