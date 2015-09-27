@@ -1,6 +1,7 @@
 use std::cmp::Ordering;
 use std::boxed::Box;
 use std::vec::Vec;
+use std::collections::HashMap;
 
 #[derive(Clone, Eq, PartialEq, Debug)]
 pub struct HuffmanTree {
@@ -18,6 +19,34 @@ impl HuffmanTree {
 			count : 0,
 			elem : Vec::new()
 		}
+	}
+	pub fn serialize(self : HuffmanTree) {
+		let mut serialize = self.serialize_internal();
+		serialize.sort_by
+	}
+
+	pub fn serialize_internal(self : HuffmanTree) -> Vec<u8> {
+		let mut result = Vec::new();
+		let mut map = HashMap::new();
+		let mut count = 0;
+
+		if self.zero.is_some() {
+			bytes.extend(self.zero.unwrap().serialize());
+			count += 1;
+		}
+
+		if self.one.is_some(){
+			bytes.extend(self.one.unwrap().serialize());
+			count += 1;
+		}
+
+		if count == 0 {
+			for byte in self.bytes {
+				bytes.push((byte, self.count));
+			}
+		}
+
+		return bytes;
 	}
 }
 

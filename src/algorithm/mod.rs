@@ -39,8 +39,6 @@ pub fn decompress_data(data : & Vec<u8>, tree : &HuffmanTree, original_length : 
 	let mut result = Vec::new();
 	let mut all_bits : Vec<bool> = Vec::new();
 
-	println!("Tree: {:?}", tree);
-
 	for byte in data {
 		for bit in make_bits(byte.clone()) {
 			all_bits.push(bit);
@@ -50,7 +48,6 @@ pub fn decompress_data(data : & Vec<u8>, tree : &HuffmanTree, original_length : 
 	let mut bytes : usize = 0; 
 
 	while bytes < original_length && all_bits.len() > 0 { 
-		println!("Decompressing: {:?}", all_bits);
 		let codeword = decompress_codeword(&mut all_bits, tree);
 		result.push(codeword);
 		bytes += 1;
@@ -103,10 +100,6 @@ fn walk_to_byte(byte : &u8, tree : &HuffmanTree) -> Vec<bool> {
 	}
 
 	result.reverse();
-
-	println!("Encode {} as {:?}", byte, result);
-
-
 	return result;
 }
 
