@@ -1,33 +1,179 @@
-   Compiling compress v0.1.0 (file:///C:/Users/mate/Scratch/Rust/compress)
-     Running target\debug\compress-3a137050136a5d02.exe
+     Running target\debug\compress-45171bb43795ef57.exe
 
-running 20 tests
+running 23 tests
+Compressing data: [1]
+Compressing data: [1, 1, 0]
+Bit: false
+Byte: [1]
+Compressing data: [1, 1, 0, 1, 0]
 test algorithm::hufftests::simple_compress_decompress_test_1 ... ok
-test algorithm::hufftests::simple_compress_decompress_test_2 ... ok
-test algorithm::hufftests::simple_compress_decompress_test_4 ... ok
-test algorithm::hufftests::simple_compress_decompress_test_5 ... ok
+Compressing data: [0, 1]
+Bit: true
+Byte: [1]
+Bit: true
+Byte: [1]
+Bit: false
+Byte: [0]
 test algorithm::hufftests::simple_compress_decompress_test_3 ... ok
+Bit: true
+Byte: [1]
+Bit: true
+Byte: [1]
+Bit: false
+Byte: [0]
+Bit: true
+Byte: [1]
+Bit: false
+Byte: [0]
+Compressing data: [0, 2, 1]
+test algorithm::hufftests::simple_compress_decompress_test_4 ... ok
+Bit: true
+Byte: [0]
+Bit: false
+Byte: [1]
+test algorithm::hufftests::simple_compress_decompress_test_2 ... ok
+Bit: false
+Byte: [0]
+Bit: true
+Bit: false
+Byte: [2]
+Bit: true
+Bit: true
+Byte: [1]
+Compressing data: [0, 2, 1, 5, 10, 20, 20, 20, 20, 1, 1, 1, 34, 34, 34, 7, 1]
+test algorithm::hufftests::simple_compress_decompress_test_5 ... ok
+Compressing data: [0]
 test algorithm::hufftests::simple_compress_test_1 ... ok
+Compressing data: [0, 1, 2]
+Bit: false
+Bit: false
+Bit: false
+Byte: [0]
+Bit: true
+Bit: true
+Bit: false
+Compressing data: [0, 255]
+Bit: true
+Byte: [2]
+Bit: true
+Bit: false
+Byte: [1]
+Bit: true
+Bit: true
+Bit: false
+Compressing data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 1]
+Bit: false
+Byte: [5]
+Bit: false
+Bit: false
+Bit: true
+Bit: false
+Byte: [10]
+Bit: false
+Bit: true
+Byte: [20]
+Bit: false
+Bit: true
+Byte: [20]
+Bit: false
+Bit: true
+Byte: [20]
+Bit: false
+Bit: true
+Byte: [20]
+Bit: true
+Bit: false
+Byte: [1]
+Bit: true
+Bit: false
+Byte: [1]
+Bit: true
+Bit: false
+Byte: [1]
+thread 'algorithm::hufftests::simple_serialize_2' panicked at 'index out of bounds: the len is 255 but the index is 255Bit: true
+Bit: true
+Bit: true
+', ../src/libcollections\vec.rs:Byte: [34]
+Bit: true
+Bit: true
+1371Bit: true
+Byte: [34]
+Bit: true
+Bit: true
+
+Bit: true
+Byte: [34]
+Bit: false
+Bit: false
+Bit: true
+Bit: true
+Byte: [7]
+Bit: true
+Bit: false
+Byte: [1]
+test algorithm::hufftests::simple_compress_decompress_test_6 ... ok
 test algorithm::hufftests::simple_tree_1 ... ok
+Heres the vec: [1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+test algorithm::hufftests::simple_serialize_1 ... ok
 test algorithm::hufftests::simple_tree_test_1 ... ok
 test algorithm::hufftests::simple_tree_test_2 ... ok
-test algorithm::hufftests::test_make_bits_1 ... ok
 test algorithm::hufftests::simple_tree_walk_1 ... ok
 test algorithm::hufftests::test_make_bits_0 ... ok
-test algorithm::hufftests::test_make_bits_32 ... ok
+test algorithm::hufftests::test_make_bits_1 ... ok
 test algorithm::hufftests::test_make_bits_70 ... ok
+test algorithm::hufftests::test_make_bits_32 ... ok
 test tree::hufftests::smoke_test1 ... ok
 test tree::hufftests::smoke_test2 ... ok
 test tree::hufftests::smoke_code_2_elems ... ok
 test tree::hufftests::smoke_test3 ... ok
-test tree::hufftests::test_tree_has_elems_1 ... ok
+Tree: HuffmanTree { zero: Some(HuffmanTree { zero: None, one: None, count: 4, elem: [2] }), one: Some(HuffmanTree { zero: Some(HuffmanTree { zero: None, one: None, count: 2, elem: [0] }), one: Some(HuffmanTree { zero: None, one: None, count: 3, elem: [1] }), count: 5, elem: [0, 1] }), count: 9, elem: [2, 0, 1] }
 test tree::hufftests::test_tree_has_elems_2 ... ok
+test tree::hufftests::test_tree_has_elems_1 ... ok
+stack backtrace:
+   1:           0x49eb55 - main
+   2:           0x4a8553 - main
+   3:           0x46b06f - main
+   4:           0x46b9ea - main
+   5:           0x4a7d13 - main
+   6:           0x4c47b9 - main
+   7:           0x4bfd4c - main
+   8:           0x4089f8
+   9:           0x405974
+  10:           0x40d91c
+  11:           0x41921b
+  12:           0x43f249 - main
+  13:           0x441c7c - main
+  14:           0x43f9b9 - main
+  15:           0x4a9e6c - main
+  16:           0x4a9e49 - main
+  17:           0x492f25 - main
+  18:           0x43fb77 - main
+  19:           0x4a5e54 - main
+  20:     0x7ff8a11013d2 - BaseThreadInitThunk
+test algorithm::hufftests::simple_serialize_2 ... FAILED
 
-test result: ok. 20 passed; 0 failed; 0 ignored; 0 measured
+failures:
 
-   Doc-tests compress
+failures:
+    algorithm::hufftests::simple_serialize_2
 
-running 0 tests
+test result: FAILED. 22 passed; 1 failed; 0 ignored; 0 measured
 
-test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured
+thread '<main>' panicked at 'Some tests failed', ../src/libtest/lib.rs:255
+stack backtrace:
+   1:           0x49eb55 - main
+   2:           0x4a8553 - main
+   3:           0x46b06f - main
+   4:           0x41e0f1 - main
+   5:           0x420721 - main
+   6:           0x426dd6 - main
+   7:           0x41c6c1
+   8:           0x4a9e6c - main
+   9:           0x4a9e49 - main
+  10:           0x492f25 - main
+  11:           0x4a8e9a - main
+  12:           0x41c6fb - main
+  13:           0x4013b5
+  14:           0x4014e8
+  15:     0x7ff8a11013d2 - BaseThreadInitThunk
 

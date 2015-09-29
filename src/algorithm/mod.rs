@@ -1,6 +1,8 @@
 use tree::{build_tree, HuffmanTree};
 
 pub fn compress_data(data : &Vec<u8>) -> (Vec<u8>, HuffmanTree) {
+	println!("Compressing data: {:?}", data);
+
 	let tree = build_tree(data);
 	let mut all_bits : Vec<bool> = Vec :: new();
 
@@ -95,11 +97,10 @@ fn decompress_codeword(bits : &mut Vec<bool>, tree : &HuffmanTree) -> u8 {
 fn walk_to_byte(byte : &u8, tree : &HuffmanTree) -> Vec<bool> {
 	let mut result = walk_to_byte_internal(byte, tree);
 
-	if result.len() == 0 {
-		panic!("No nodes in tree");
-	}
+	assert!(result.len() != 0, format!("No nodes in tree for byte {} below\n{:?}", byte, tree));
 
 	result.reverse();
+
 	return result;
 }
 
@@ -319,5 +320,47 @@ mod hufftests {
 
 		assert_eq!(original_data, decompressed); 
 		assert_eq!(original_data.len(), decompressed.len());
+	}
+
+	#[test]
+	fn simple_serialize_1() {
+		let mut original_data : Vec<u8> = vec![0,1,2];
+
+		let mut tree = compress_data(&original_data).1;
+		let bytes = tree.serialize();
+
+		println!("Heres the vec: {:?}", bytes);
+
+		assert_eq!(1, bytes[0]);
+		assert_eq!(0, bytes[1]);
+		assert_eq!(0, bytes[2]);
+		assert_eq!(0, bytes[3]);
+
+		assert_eq!(1, bytes[4]);
+		assert_eq!(0, bytes[5]);
+		assert_eq!(0, bytes[6]);
+		assert_eq!(0, bytes[7]);
+
+		assert_eq!(1, bytes[8]);
+		assert_eq!(0, bytes[9]);
+		assert_eq!(0, bytes[10]);
+		assert_eq!(0, bytes[11]);
+	}
+
+	#[test]
+	fn simple_serialize_2() {
+		let mut original_data : Vec<u8> = vec![0, 255];
+
+		let mut tree = compress_data(&original_data).1;
+		let serialized = tree.serialize();
+
+		println!("Heres the vec: {:?}", serialized);
+
+		assert_eq!(256*4, serialized.len());
+
+		assert_eq!(0, serialized[4*255 + 1]);
+		assert_eq!(1, serialized[4*255 + 2]);
+		assert_eq!(0, serialized[4*255 + 3]);
+		assert_eq!(0, serialized[4*255 + 4]);
 	}
 }

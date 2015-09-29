@@ -20,33 +20,28 @@ impl HuffmanTree {
 			elem : Vec::new()
 		}
 	}
-	pub fn serialize(self : HuffmanTree) {
-		let mut serialize = self.serialize_internal();
-		serialize.sort_by
+	pub fn serialize(self : HuffmanTree) -> Vec<u8>{
+		let mut out = vec![0; 256 * 4];
+
+		self.serialize_internal(&mut out);	
+
+		assert_eq!(256 * 4, out.len());
+
+		return out;
 	}
 
-	pub fn serialize_internal(self : HuffmanTree) -> Vec<u8> {
-		let mut result = Vec::new();
-		let mut map = HashMap::new();
-		let mut count = 0;
-
-		if self.zero.is_some() {
-			bytes.extend(self.zero.unwrap().serialize());
-			count += 1;
-		}
-
-		if self.one.is_some(){
-			bytes.extend(self.one.unwrap().serialize());
-			count += 1;
-		}
-
-		if count == 0 {
-			for byte in self.bytes {
-				bytes.push((byte, self.count));
+	fn serialize_internal<'a>(self : HuffmanTree, result : &mut Vec<u8>) {
+		if !self.zero.is_some() && !self.one.is_some() {
+			for i in self.elem {
+				let base = (i as usize) * 4 ;
+				result[base] = ((self.count >> 0) & 0xFF) as u8;
+				result[base + 1] = ((self.count >> 8) & 0xFF) as u8;
+				result[base + 2] = ((self.count >> 16) & 0xFF) as u8;
+				result[base + 3] = ((self.count >> 24) & 0xFF) as u8;
 			}
 		}
-
-		return bytes;
+		if self.zero.is_some() { self.zero.unwrap().serialize_internal(result); }
+		if self.one.is_some() { self.one.unwrap().serialize_internal(result); }
 	}
 }
 
@@ -89,12 +84,21 @@ pub fn build_tree(data : &Vec<u8>) -> HuffmanTree {
 			}
 		}).collect();
 
+		all_nodes.push(HuffmanTree {
+				zero : None,
+				one : None,
+				count : 0,
+				elem : vec![255]
+			});
+
 	//gather statistics
 	for byte in data {
 		let index = byte.clone() as usize;
+		println!("Indexing {}", byte);
 		all_nodes[index].count += 1;
 	}
 
+	println!("I made it");
 	//remove nodes that don't count
 	all_nodes = all_nodes.into_iter().filter(|i| i.count > 0).collect::<Vec<_>>();
 
