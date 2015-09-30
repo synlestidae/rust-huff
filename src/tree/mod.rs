@@ -30,6 +30,17 @@ impl HuffmanTree {
 		return out;
 	}
 
+	pub fn deserialize(data : Vec<u8>) -> HuffmanTree {
+		let mut stats = blank_node_vec();
+		for i in (0 as usize ..256) {
+			stats[i].count = data[0] as i32 + 
+				((data[1] as i32) << 8) + 
+				((data[2] as i32) << 16) + 
+				((data[3] as i32) << 24);
+		}
+		return compile_nodes(&mut stats);
+	}
+
 	fn serialize_internal<'a>(self : HuffmanTree, result : &mut Vec<u8>) {
 		if !self.zero.is_some() && !self.one.is_some() {
 			for i in self.elem {
@@ -94,14 +105,39 @@ pub fn build_tree(data : &Vec<u8>) -> HuffmanTree {
 	//gather statistics
 	for byte in data {
 		let index = byte.clone() as usize;
-		println!("Indexing {}", byte);
 		all_nodes[index].count += 1;
 	}
 
-	println!("I made it");
 	//remove nodes that don't count
 	all_nodes = all_nodes.into_iter().filter(|i| i.count > 0).collect::<Vec<_>>();
 
+	return compile_nodes(&mut all_nodes);
+}
+
+fn blank_node_vec() -> Vec<HuffmanTree> {
+	let mut all_nodes : Vec<_> = (0..255).map(|n| {
+	let mut elems = Vec::new();
+
+	elems.push(n);
+	HuffmanTree {
+		zero : None,
+		one : None,
+		count : 0,
+		elem : elems
+		}
+	}).collect();
+
+	all_nodes.push(HuffmanTree {
+		zero : None,
+		one : None,
+		count : 0,
+		elem : vec![255]
+	});
+
+	return all_nodes;
+}
+
+fn compile_nodes(all_nodes : &mut Vec<HuffmanTree>) -> HuffmanTree {
 	while all_nodes.len() > 1 {
 		all_nodes.sort_by(|n1, n2| n2.count.cmp(&n1.count));
 

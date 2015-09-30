@@ -349,8 +349,8 @@ mod hufftests {
 
 	#[test]
 	fn simple_serialize_2() {
-		let mut original_data : Vec<u8> = vec![0, 255];
-
+		let mut original_data : Vec<u8> = vec![0];
+		original_data.extend(vec![255; 32]);
 		let mut tree = compress_data(&original_data).1;
 		let serialized = tree.serialize();
 
@@ -358,9 +358,9 @@ mod hufftests {
 
 		assert_eq!(256*4, serialized.len());
 
+		assert_eq!(32, serialized[4*255 + 0]);
 		assert_eq!(0, serialized[4*255 + 1]);
-		assert_eq!(1, serialized[4*255 + 2]);
+		assert_eq!(0, serialized[4*255 + 2]);
 		assert_eq!(0, serialized[4*255 + 3]);
-		assert_eq!(0, serialized[4*255 + 4]);
 	}
 }
