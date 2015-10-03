@@ -38,9 +38,6 @@ impl HuffmanTree {
 				((data[i*4 + 2] as i32) << 16) + 
 				((data[i*4 + 3] as i32) << 24);
 		}
-
-		println!("Received stats {:?}", stats);
-
 		return compile_nodes(&mut stats);
 	}
 
@@ -142,7 +139,6 @@ fn compile_nodes(unfiltered_nodes : &mut Vec<HuffmanTree>) -> HuffmanTree {
 
 	let mut all_nodes : Vec<HuffmanTree> = Vec::new();
 	for node in unfiltered_nodes {
-		println!("Placing node {:?} in filtered", node);
 		if (node.count > 0) { all_nodes.push(node.clone()); }
 	}
 
@@ -286,7 +282,5 @@ mod hufftests {
 		let tree = build_tree(&stream);
 
 		assert_eq!(3, tree.elem.len());
-
-		println!("Tree: {:?}", tree);
 	}
 }

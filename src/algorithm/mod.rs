@@ -1,8 +1,6 @@
 use tree::{build_tree, HuffmanTree};
 
 pub fn compress_data(data : &Vec<u8>) -> (Vec<u8>, HuffmanTree) {
-	println!("Compressing data: {:?}", data);
-
 	let tree = build_tree(data);
 	let mut all_bits : Vec<bool> = Vec :: new();
 
@@ -73,8 +71,6 @@ fn decompress_codeword(bits : &mut Vec<bool>, tree : &HuffmanTree) -> u8 {
 
 	let bit = bits.remove(0);
 
-	println!("Bit: {}", bit);
-
 	match (bit, &tree.zero) {
 		(false, &Some(ref leftTree)) => { treeDown = &*leftTree; },
 		_ => {
@@ -86,7 +82,6 @@ fn decompress_codeword(bits : &mut Vec<bool>, tree : &HuffmanTree) -> u8 {
 	}
 
 	if !treeDown.zero.is_some() && !treeDown.one.is_some() {
-		println!("Byte: {:?}", treeDown.elem);
 		return treeDown.elem[0];
 	}else {
 		return decompress_codeword(bits, treeDown);
