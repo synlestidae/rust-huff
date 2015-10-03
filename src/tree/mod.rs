@@ -33,11 +33,14 @@ impl HuffmanTree {
 	pub fn deserialize(data : Vec<u8>) -> HuffmanTree {
 		let mut stats = blank_node_vec();
 		for i in (0 as usize ..256) {
-			stats[i].count = data[0] as i32 + 
-				((data[1] as i32) << 8) + 
-				((data[2] as i32) << 16) + 
-				((data[3] as i32) << 24);
+			stats[i].count = data[i*4] as i32 + 
+				((data[i*4 + 1] as i32) << 8) + 
+				((data[i*4 + 2] as i32) << 16) + 
+				((data[i*4 + 3] as i32) << 24);
 		}
+
+		println!("Received stats {:?}", stats);
+
 		return compile_nodes(&mut stats);
 	}
 
@@ -108,9 +111,6 @@ pub fn build_tree(data : &Vec<u8>) -> HuffmanTree {
 		all_nodes[index].count += 1;
 	}
 
-	//remove nodes that don't count
-	all_nodes = all_nodes.into_iter().filter(|i| i.count > 0).collect::<Vec<_>>();
-
 	return compile_nodes(&mut all_nodes);
 }
 
@@ -137,7 +137,15 @@ fn blank_node_vec() -> Vec<HuffmanTree> {
 	return all_nodes;
 }
 
-fn compile_nodes(all_nodes : &mut Vec<HuffmanTree>) -> HuffmanTree {
+fn compile_nodes(unfiltered_nodes : &mut Vec<HuffmanTree>) -> HuffmanTree {
+	//remove nodes that don't count
+
+	let mut all_nodes : Vec<HuffmanTree> = Vec::new();
+	for node in unfiltered_nodes {
+		println!("Placing node {:?} in filtered", node);
+		if (node.count > 0) { all_nodes.push(node.clone()); }
+	}
+
 	while all_nodes.len() > 1 {
 		all_nodes.sort_by(|n1, n2| n2.count.cmp(&n1.count));
 
@@ -147,18 +155,21 @@ fn compile_nodes(all_nodes : &mut Vec<HuffmanTree>) -> HuffmanTree {
 		match (pop1, pop2) {
 			(Some(n1), Some(n2)) => {
 				let mut new_elems = Vec::new();
-				
-				for e1 in n1.clone().elem {new_elems.push(e1);}
-				for e2 in n2.clone().elem {new_elems.push(e2);}
+				let n1_new = n1.clone();
+				let n2_new = n2.clone();
 
-				let sum = n1.count + n2.count;
+				for e1 in n1_new.elem {new_elems.push(e1);}
+				for e2 in n2_new.elem {new_elems.push(e2);}
+
+				let sum = n1_new.count + n2_new.count;
 
 				let new_node = HuffmanTree {
-					zero : Some(Box::new(n1)),
-					one : Some(Box::new(n2)),
+					zero : Some(Box::new(n1.clone())),
+					one : Some(Box::new(n2.clone())),
 					count : sum,
 					elem : new_elems
 				};
+
 				all_nodes.insert(0, new_node);
 			},
 			_ => break,

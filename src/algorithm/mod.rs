@@ -363,4 +363,44 @@ mod hufftests {
 		assert_eq!(0, serialized[4*255 + 2]);
 		assert_eq!(0, serialized[4*255 + 3]);
 	}
+
+	#[test]
+	fn simple_serialize_deserialize_1() {
+		let data = vec![0,1];
+		let tree = build_tree(&data);
+
+		assert_eq!(tree.clone(), HuffmanTree::deserialize(tree.serialize()));
+	}
+
+	#[test]
+	fn simple_serialize_deserialize_2() {
+		let data = vec![0,1,1,1];
+		let tree = build_tree(&data);
+
+		assert_eq!(tree.clone(), HuffmanTree::deserialize(tree.serialize()));
+	}
+
+	#[test]
+	fn simple_serialize_deserialize_3() {
+		let data = "Hello world!".to_string().into_bytes();
+		let tree = build_tree(&data);
+
+		assert_eq!(tree.clone(), HuffmanTree::deserialize(tree.serialize()));
+	}
+
+	#[test]
+	fn simple_serialize_deserialize_4() {
+		let data = "Test string123345622466733303030".to_string().into_bytes();
+		let tree = build_tree(&data);
+
+		assert_eq!(tree.clone(), HuffmanTree::deserialize(tree.serialize()));
+	}
+
+	#[test]
+	fn simple_serialize_deserialize_5() {
+		let data = "Hail Mary, full of grace".to_string().into_bytes();
+		let tree = build_tree(&data);
+
+		assert_eq!(tree.clone(), HuffmanTree::deserialize(tree.serialize()));
+	}
 }
